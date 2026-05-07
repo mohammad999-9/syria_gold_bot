@@ -1,5 +1,21 @@
 import os
 import logging
+from flask import Flask
+import threading
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "I am alive!"
+
+def run():
+    app.run(host='0.0.0.0', port=10000)
+
+def keep_alive():
+    t = threading.Thread(target=run)
+    t.start()
+
 from datetime import datetime
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
@@ -80,7 +96,7 @@ def main():
     job_queue.run_daily(send_rates_to_channel, time=datetime.strptime("15:00", "%H:%M").time())
 
     logger.info("تم تشغيل البوت والمجدول بنجاح!")
-
+  
     # تشغيل خادم الويب للبقاء حياً
     keep_alive()
 
